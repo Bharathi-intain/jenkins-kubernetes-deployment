@@ -33,7 +33,7 @@ pipeline {
                     FAILED_STAGE=env.STAGE_NAME
                     echo "stage 1"
                 }
-            	git branch: 'main', credentialsId: 'git-pat', url: 'https://github.com/mohana-intain/intain-va-node-app.git'
+            	git branch: 'main', credentialsId: 'git-pat', url: 'https://github.com/Bharathi-intain/intain-va-node-app.git'
 
         	}
     	}
