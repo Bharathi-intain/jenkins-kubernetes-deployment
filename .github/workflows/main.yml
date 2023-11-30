@@ -27,7 +27,7 @@ jobs:
       - name: Build and Push Docker Image to Docker Registry
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: intainregistry/intain-va-node-app
+          image: bharathi1902/intain-va-node-app
           tags: $CUSTOM_VERSION, latest
           registry: docker.io
           dockerfile: Dockerfile
