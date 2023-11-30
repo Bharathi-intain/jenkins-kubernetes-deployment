@@ -1,0 +1,35 @@
+name: Intain-va-node-app
+
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read version from version.txt
+        uses: jaywcjlove/github-action-read-file@main
+        id: customVersion
+        with:
+          path: version.txt
+      - name: Remove the newline and space characters in version
+        run: |
+          : # Fetch the customVersion retrieved from version.txt
+          cv="${{steps.customVersion.outputs.content}}"
+          : # Remove the newline character
+          cv=$(echo $cv | sed 's/\\n//')
+          : # Remove all space characters and add run number
+          cv=$(echo $cv | sed 's/[[:space:]]//g').${{ github.run_number }}
+          : # Transfer to github env
+          echo "CUSTOM_VERSION=$cv" >> "$GITHUB_ENV"
+      - name: Checkout source from git repository
+        uses: actions/checkout@v4
+      - name: Build and Push Docker Image to Docker Registry
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: intainregistry/intain-va-node-app
+          tags: $CUSTOM_VERSION, latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
